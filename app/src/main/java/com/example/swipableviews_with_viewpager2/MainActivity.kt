@@ -3,9 +3,13 @@ package com.example.swipableviews_with_viewpager2
 import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.swipableviews_with_viewpager2.databinding.ActivityMainBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayoutMediator
 
 private lateinit var binding: ActivityMainBinding
 
@@ -25,13 +29,33 @@ class MainActivity : AppCompatActivity() {
         val adapter = ViewPagerAdapter(images)
         binding.viewPager.adapter = adapter
 
-        //Swipe Vertical
-        binding.viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+        TabLayoutMediator(binding.tabLayout,binding.viewPager){ tab, position->
+            tab.text = "Tab ${position +1}"
+        }.attach()
 
-        //Swipe automate
-        val page = binding.viewPager
-        page.beginFakeDrag()
-        page.fakeDragBy(-5f)
-        page.endFakeDrag()
+        binding.tabLayout.addOnTabSelectedListener(object :OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                Toast.makeText(this@MainActivity,"Selected ${tab?.text}",Toast.LENGTH_SHORT).show()
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                Toast.makeText(this@MainActivity,"UnSelected ${tab?.text}",Toast.LENGTH_SHORT).show()
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                Toast.makeText(this@MainActivity,"Reselected ${tab?.text}",Toast.LENGTH_SHORT).show()
+            }
+        })
+
+//        //Swipe Vertical
+//        binding.viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+//
+//        //Swipe automate
+//        val page = binding.viewPager
+//        page.beginFakeDrag()
+//        page.fakeDragBy(-5f)
+//        page.endFakeDrag()
     }
 }
